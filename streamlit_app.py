@@ -33,7 +33,7 @@ def display_sidebar():
     return selected_tab
 
 def main():
-    st.title("AIVS Strategic Dashboard")
+    st.title("AIVS OKR Strategic Dashboard")
 
     # Display the custom sidebar with title, radio buttons, and footer
     selected_tab = display_sidebar()
