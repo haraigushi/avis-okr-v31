@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 600px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "black"}, "id": 1, "label": "Chairman of the Board (\u0631\u06cc\u06cc\u0633 \u0647\u06cc\u0626\u062a \u0645\u062f\u06cc\u0631\u0647)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 2, "label": "CEO \u2013 AIVS (\u0645\u062f\u06cc\u0631 \u0639\u0627\u0645\u0644 \u0634\u0631\u06a9\u062a AIVS)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 3, "label": "VP \u2013 AIVS (\u0645\u0639\u0627\u0648\u0646 \u0634\u0631\u06a9\u062a AIVS)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 4, "label": "AIVS Internal Division (\u0646\u06cc\u0631\u0648\u0647\u0627\u06cc \u0633\u062a\u0627\u062f AIVS)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 5, "label": "COO \u2013 Chief Operating Officer (\u0645\u062f\u06cc\u0631 \u0627\u0631\u0634\u062f \u0639\u0645\u0644\u06cc\u0627\u062a)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 6, "label": "Strategy \u0026 Operations Lead (\u0633\u0631\u067e\u0631\u0633\u062a \u0627\u0633\u062a\u0631\u0627\u062a\u0698\u06cc \u0648 \u0639\u0645\u0644\u06cc\u0627\u062a)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 7, "label": "Head of Facilities \u0026 Logistics (\u0631\u06cc\u06cc\u0633 \u0627\u0645\u0648\u0631 \u062a\u062f\u0627\u0631\u06a9\u0627\u062a \u0648 \u067e\u0634\u062a\u06cc\u0628\u0627\u0646\u06cc)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 8, "label": "CMO \u2013 Chief Marketing Officer (\u0645\u062f\u06cc\u0631 \u0627\u0631\u0634\u062f \u0628\u0627\u0632\u0627\u0631\u06cc\u0627\u0628\u06cc)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 9, "label": "Head of International Market Research (\u0631\u06cc\u06cc\u0633 \u062a\u062d\u0642\u06cc\u0642\u0627\u062a \u0628\u0627\u0632\u0627\u0631 \u0628\u06cc\u0646\u200c\u0627\u0644\u0645\u0644\u0644)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 10, "label": "Head of Domestic Market Research (\u0631\u06cc\u06cc\u0633 \u062a\u062d\u0642\u06cc\u0642\u0627\u062a \u0628\u0627\u0632\u0627\u0631 \u062f\u0627\u062e\u0644\u06cc)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 11, "label": "AIVS Product Growth \u0026 Brand Team (\u062a\u06cc\u0645 \u062a\u0648\u0633\u0639\u0647 \u0645\u062d\u0635\u0648\u0644\u060c \u0628\u0631\u0646\u062f \u0648 \u0631\u0634\u062f AIVS)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 12, "label": "Innovation Unit Marketing Support Team (\u062a\u06cc\u0645 \u067e\u0634\u062a\u06cc\u0628\u0627\u0646\u06cc \u0628\u0627\u0632\u0627\u0631\u06cc\u0627\u0628\u06cc \u0648\u0627\u062d\u062f\u0647\u0627\u06cc \u0646\u0648\u0622\u0648\u0631\u06cc)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 13, "label": "CFO \u2013 Chief Financial Officer (\u0645\u062f\u06cc\u0631 \u0627\u0631\u0634\u062f \u0645\u0627\u0644\u06cc)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 14, "label": "Head of AIVS Accounting (\u0631\u06cc\u06cc\u0633 \u062d\u0633\u0627\u0628\u062f\u0627\u0631\u06cc AIVS)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 15, "label": "Head of IU Accounting (\u0631\u06cc\u06cc\u0633 \u062d\u0633\u0627\u0628\u062f\u0627\u0631\u06cc \u0648\u0627\u062d\u062f\u0647\u0627\u06cc \u0646\u0648\u0622\u0648\u0631\u06cc)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 16, "label": "CHRO \u2013 Chief Human Resources Officer (\u0645\u062f\u06cc\u0631 \u0627\u0631\u0634\u062f \u0645\u0646\u0627\u0628\u0639 \u0627\u0646\u0633\u0627\u0646\u06cc)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 17, "label": "CTO \u2013 Chief Technology Officer (\u0645\u062f\u06cc\u0631 \u0627\u0631\u0634\u062f \u0641\u0646\u0627\u0648\u0631\u06cc)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 18, "label": "Head of Product Design \u0026 Customer Experience (\u0631\u06cc\u06cc\u0633 \u0637\u0631\u0627\u062d\u06cc \u0645\u062d\u0635\u0648\u0644 \u0648 \u062a\u062c\u0631\u0628\u0647 \u06a9\u0627\u0631\u0628\u0631\u06cc)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 19, "label": "Head of Strategic \u0026 Decision Support (\u0631\u06cc\u06cc\u0633 \u067e\u0634\u062a\u06cc\u0628\u0627\u0646\u06cc \u0631\u0627\u0647\u0628\u0631\u062f\u06cc \u0648 \u062a\u0635\u0645\u06cc\u0645\u200c\u0633\u0627\u0632\u06cc)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 20, "label": "Head of Prototyping \u0026 MVP Development (\u0631\u06cc\u06cc\u0633 \u062a\u0648\u0633\u0639\u0647 \u0646\u0645\u0648\u0646\u0647 \u0627\u0648\u0644\u06cc\u0647 \u0648 MVP)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 21, "label": "Innovation Management Division (\u0645\u062f\u06cc\u0631\u06cc\u062a \u0648\u0627\u062d\u062f\u0647\u0627\u06cc \u0646\u0648\u0622\u0648\u0631\u06cc)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 22, "label": "PMO \u2013 Project Management Office (\u062f\u0641\u062a\u0631 \u0645\u062f\u06cc\u0631\u06cc\u062a \u067e\u0631\u0648\u0698\u0647)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 23, "label": "Innovation Unit 1 (\u0648\u0627\u062d\u062f \u0646\u0648\u0622\u0648\u0631\u06cc \u06f1)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 24, "label": "Product Manager (\u0645\u062f\u06cc\u0631 \u0645\u062d\u0635\u0648\u0644)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 25, "label": "Innovation Unit 2 (\u0648\u0627\u062d\u062f \u0646\u0648\u0622\u0648\u0631\u06cc \u06f2)", "shape": "box"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": 26, "label": "Innovation Unit 3 (\u0648\u0627\u062d\u062f \u0646\u0648\u0622\u0648\u0631\u06cc \u06f3)", "shape": "box"}]);
+                  edges = new vis.DataSet([{"from": 1, "to": 2}, {"from": 2, "to": 3}, {"from": 3, "to": 4}, {"from": 4, "to": 5}, {"from": 4, "to": 8}, {"from": 4, "to": 13}, {"from": 4, "to": 16}, {"from": 4, "to": 17}, {"from": 5, "to": 6}, {"from": 5, "to": 7}, {"from": 8, "to": 9}, {"from": 8, "to": 10}, {"from": 8, "to": 11}, {"from": 8, "to": 12}, {"from": 13, "to": 14}, {"from": 13, "to": 15}, {"from": 17, "to": 18}, {"from": 17, "to": 19}, {"from": 17, "to": 20}, {"from": 21, "to": 22}, {"from": 22, "to": 23}, {"from": 22, "to": 25}, {"from": 22, "to": 26}, {"from": 23, "to": 24}, {"from": 25, "to": 24}, {"from": 26, "to": 24}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

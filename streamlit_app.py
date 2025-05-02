@@ -3,6 +3,7 @@ from components.executive_summary import display as executive_summary
 from components.phase_1_strategy import display as phase_1_strategy
 from components.phase_2_market import display as phase_2_market
 from components.phase_3_scale import display as phase_3_scale
+from components.home import display as home  # Import for the "Home" tab
 
 # Function to display sidebar with radio buttons
 def display_sidebar():
@@ -17,12 +18,12 @@ def display_sidebar():
     # Title above the sidebar
     st.sidebar.markdown("# AIVS Co.")
     
-    # Define the tab names
-    tabs = ["Executive Summary", "Phase 1 (Strategy)", "Phase 2 (Market)", "Phase 3 (Scale)"]
+    # Define the tab names, including the new "Home" tab
+    tabs = ["Home", "Executive Summary", "Phase 1 (Strategy)", "Phase 2 (Market)", "Phase 3 (Scale)"]
     
     # Use radio buttons for tab selection
     selected_tab = st.sidebar.radio(
-        "Select Phase",
+        "Navigate AIVS -",
         tabs
     )
 
@@ -39,7 +40,9 @@ def main():
     selected_tab = display_sidebar()
 
     # Display content based on selected tab
-    if selected_tab == "Executive Summary":
+    if selected_tab == "Home":
+        home()  # Display content for the "Home" tab
+    elif selected_tab == "Executive Summary":
         executive_summary()
     elif selected_tab == "Phase 1 (Strategy)":
         phase_1_strategy()
